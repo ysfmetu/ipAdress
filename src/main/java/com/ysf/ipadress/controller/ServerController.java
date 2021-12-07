@@ -1,18 +1,26 @@
 package com.ysf.ipadress.controller;
 
-import com.ysf.ipadress.enumeration.Status;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ysf.ipadress.model.Response;
 import com.ysf.ipadress.model.Server;
+import com.ysf.ipadress.model.dto.UserDTO;
+import com.ysf.ipadress.security.EResult;
+import com.ysf.ipadress.security.JwtUtil;
+import com.ysf.ipadress.security.LoggedUserModel;
+import com.ysf.ipadress.security.Result;
 import com.ysf.ipadress.service.impl.ServerServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static com.ysf.ipadress.enumeration.Status.SERVER_UP;
 import static java.time.LocalDateTime.now;
@@ -24,6 +32,25 @@ import static org.springframework.http.HttpStatus.OK;
 public class ServerController {
 
     private final ServerServiceImpl serverService;
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+
+    @PostMapping("/login")
+    public Result<Object> saveServer(@RequestBody UserDTO dto) throws JsonProcessingException {
+
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUserName(), dto.getPassword()));
+        String token = jwtUtil.generateToken(authenticate);
+        LoggedUserModel user = (LoggedUserModel) authenticate.getPrincipal();
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", token);
+        result.put("info", user);
+
+        return new Result<Object>(EResult.success,"Başarılı",result);
+    }
+
+
+
     @GetMapping("/list")
     public ResponseEntity<Response> getServers() throws InterruptedException {
         /*TimeUnit.SECONDS.sleep(5);*/
