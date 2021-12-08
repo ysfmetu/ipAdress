@@ -4,7 +4,6 @@ import com.ysf.ipadress.enumeration.Status;
 import com.ysf.ipadress.model.Server;
 import com.ysf.ipadress.repo.ServerRepo;
 import com.ysf.ipadress.service.ServerService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -12,15 +11,16 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collection;
-@RequiredArgsConstructor
 @Service
-@Transactional
 @Slf4j
 public class ServerServiceImpl implements ServerService {
 
     private final ServerRepo serverRepo;
+
+    public ServerServiceImpl(ServerRepo serverRepo) {
+        this.serverRepo = serverRepo;
+    }
 
     @Override
     public Server create(Server server) {

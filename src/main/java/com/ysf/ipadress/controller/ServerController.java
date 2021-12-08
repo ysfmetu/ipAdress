@@ -29,6 +29,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/server")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ServerController {
 
     private final ServerServiceImpl serverService;
