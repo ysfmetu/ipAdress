@@ -24,6 +24,7 @@ public class LdapAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+
         String username;
         String password = "";
         com.ysf.ipadress.security.LoggedUserModel userModel;
