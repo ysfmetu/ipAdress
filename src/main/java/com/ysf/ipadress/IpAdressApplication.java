@@ -20,13 +20,7 @@ public class IpAdressApplication {
     public static void main(String[] args) {
         SpringApplication.run(IpAdressApplication.class, args);
     }
-  /*  @Bean
-    CommandLineRunner run(ServerRepo serverRepo) {
-        return args -> {
-            serverRepo.save(new Server(null, "10.0.0.211", "uygulama sunucusu", "java projelerinin çalıştığı sunucu", "admin", "deneme123", Status.SERVER_UP));
-            serverRepo.save(new Server(null, "10.0.0.142", "Veritabanı sunucusu", "Postgre çalışıyor", "admin", "deneme123", Status.SERVER_UP));
-        };
-    }*/
+
 
 
 

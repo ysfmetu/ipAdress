@@ -1,5 +1,6 @@
 package com.ysf.ipadress.service.impl;
 
+import com.google.crypto.tink.subtle.AesGcmJce;
 import com.ysf.ipadress.enumeration.Status;
 import com.ysf.ipadress.model.Server;
 import com.ysf.ipadress.repo.ServerRepo;
@@ -8,10 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+
 @Service
 @Slf4j
 public class ServerServiceImpl implements ServerService {
@@ -21,6 +23,7 @@ public class ServerServiceImpl implements ServerService {
     public ServerServiceImpl(ServerRepo serverRepo) {
         this.serverRepo = serverRepo;
     }
+
 
     @Override
     public Server create(Server server) {
@@ -41,8 +44,8 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server update(Server server) {
-        serverRepo.save(server);
-        return null;
+       Server updatedServer= serverRepo.save(server);
+        return updatedServer;
     }
 
     @Override
@@ -60,5 +63,25 @@ public class ServerServiceImpl implements ServerService {
         server.setStatus(address.isReachable(1000)? Status.SERVER_UP:Status.SERVER_DOWN);
         serverRepo.save(server);
         return server;
+    }
+
+    @Override
+    public Server[] servers(Long id) {
+        String key128Bit="14slduGFdlFJn3w3";
+        String  associatedData="ysf";
+        Server[] servers= serverRepo.findAllByCategoryId(id).toArray(new Server[0]);
+        for(int i = 0; i< servers.length; i++) {
+
+            try {
+                byte[] cipherBytes = servers[i].getPassword().getBytes(StandardCharsets.ISO_8859_1);
+                AesGcmJce aesGcmJce = new AesGcmJce(key128Bit.getBytes());
+                byte[] decryptedBytes = aesGcmJce.decrypt(cipherBytes, associatedData.getBytes());
+                String convertedString = new String(decryptedBytes);
+                servers[i].setPassword(convertedString);
+            } catch (Exception ex) {
+                System.err.println("encrypt Error : " + ex);
+            }
+        }
+        return servers;
     }
 }

@@ -1,18 +1,21 @@
 package com.ysf.ipadress.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ysf.ipadress.enumeration.Status;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Server {
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+@Getter
+@Setter
+public class Server implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -24,4 +27,9 @@ public class Server {
     private String kullanici_adi;
     private String password;
     private Status status;
+
+    @ManyToOne()
+    private Category category;
+
+
 }
