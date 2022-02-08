@@ -4,6 +4,7 @@ import com.ysf.ipadress.model.Server;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 public interface ServerService {
     Server create(Server server);
@@ -13,6 +14,5 @@ public interface ServerService {
     Boolean delete(Long id);
     Server ping(String ipAddress) throws IOException;
     Server pasif(long id);
-
     Server[] servers(Long id);
 }

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,7 +46,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server update(Server server) {
-       Server updatedServer= serverRepo.save(server);
+        Server updatedServer= serverRepo.save(server);
         return updatedServer;
     }
 
